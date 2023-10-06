@@ -1,15 +1,13 @@
 from dataclasses import dataclass
 
-from pydantic import EmailStr
-
 from .address import Address
-from .value_objects import PhoneNumber, Name
+from .value_objects import PhoneNumber, Name, Email
 
 
 @dataclass
 class Person:
     first_name: Name
     last_name: Name
-    email: EmailStr
-    phone_number: PhoneNumber
-    address: Address
+    email: Email
+    phone_number: PhoneNumber | None = None
+    address: Address | None = None

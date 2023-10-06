@@ -6,5 +6,6 @@ from .value_objects import Year
 
 @dataclass
 class Lead(Person):
-    career: Career
-    year_of_inscription: Year
+    id: int | None = None
+    career: Career | None = None
+    year_of_inscription: Year | None = None
