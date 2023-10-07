@@ -25,7 +25,7 @@ class LeadRead(LeadBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class LeadUpdate(LeadBase):
