@@ -49,7 +49,6 @@ def create_lead(
 ):
     domain_lead = LeadClientAdapter.client_to_domain(lead)
     created_lead = lead_service.register_lead(lead=domain_lead)
-    # Assuming the domain_lead object has an 'id' attribute
     response.headers["Location"] = f"/leads/{created_lead.id}"
     return
 

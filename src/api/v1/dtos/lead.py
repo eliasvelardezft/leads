@@ -1,6 +1,6 @@
 from pydantic import BaseModel, validator
 
-from .address import AdressCreate, AddressRead
+from .address import AddressCreate, AddressRead
 from .career import CareerRead
 from domain.models.value_objects import Email, Name, PhoneNumber, Year
 
@@ -10,7 +10,7 @@ class LeadBase(BaseModel):
     first_name: str
     last_name: str
     phone_number: str
-    address: AdressCreate
+    address: AddressCreate
     career_id: int
     year_of_inscription: int
 
@@ -32,7 +32,27 @@ class LeadBase(BaseModel):
 
 
 class LeadCreate(LeadBase):
-    pass
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "email": "eliasvelardez@gmail.com",
+                    "first_name": "elias",
+                    "last_name": "velardez",
+                    "phone_number": "+541234567",
+                    "address": {
+                        "street": "au",
+                        "number": "40",
+                        "city": "cba",
+                        "state": "cba",
+                        "country": "arg"
+                    },
+                    "career_id": 0,
+                    "year_of_inscription": 1918
+                }
+            ]
+        }
+    }
 
 
 class LeadRead(LeadBase):
@@ -49,7 +69,7 @@ class LeadUpdate(LeadBase):
     first_name: str | None = None
     last_name: str | None = None
     phone_number: str | None = None
-    address: AdressCreate | None = None
+    address: AddressCreate | None = None
     career_id: int | None = None
     year_of_inscription: int | None = None
 
