@@ -1,12 +1,18 @@
 from pydantic import BaseModel, validator
 
-from domain.models.value_objects import Email, Name
+from .address import AdressCreate, AddressRead
+from .career import CareerRead
+from domain.models.value_objects import Email, Name, PhoneNumber, Year
 
 
 class LeadBase(BaseModel):
+    email: str
     first_name: str
     last_name: str
-    email: str
+    phone_number: str
+    address: AdressCreate
+    career_id: int
+    year_of_inscription: int
 
     @validator("email")
     def email_validator(cls, value: str) -> str:
@@ -16,6 +22,14 @@ class LeadBase(BaseModel):
     def name_validator(cls, value: str) -> str:
         return Name(name=value).name
 
+    @validator("phone_number")
+    def phone_number_validator(cls, value: str) -> str:
+        return PhoneNumber(number=value).number
+
+    @validator("year_of_inscription")
+    def year_of_inscription_validator(cls, value: int) -> int:
+        return Year(year=value).year
+
 
 class LeadCreate(LeadBase):
     pass
@@ -23,6 +37,8 @@ class LeadCreate(LeadBase):
 
 class LeadRead(LeadBase):
     id: int
+    address: AddressRead
+    career: CareerRead
 
     class Config:
         from_attributes = True
@@ -32,3 +48,8 @@ class LeadUpdate(LeadBase):
     email: str | None = None
     first_name: str | None = None
     last_name: str | None = None
+    phone_number: str | None = None
+    address: AdressCreate | None = None
+    career_id: int | None = None
+    year_of_inscription: int | None = None
+
