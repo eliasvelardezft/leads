@@ -8,4 +8,4 @@ from .value_objects import Name
 @dataclass
 class Subject:
     name: Name
-    career: Career
+    description: str

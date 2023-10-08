@@ -13,7 +13,8 @@ class Name(BaseModel):
 
 class Email(BaseModel):
     email: str = Field(
-        pattern=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+        pattern=r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
+        
     )
 
 

@@ -36,6 +36,11 @@ class FailedStatus(IStatus):
 
 
 @dataclass
+class DroppedStatus(IStatus):
+    pass
+
+
+@dataclass
 class StatusChange:
     status: IStatus
     

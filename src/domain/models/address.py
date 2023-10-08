@@ -7,4 +7,3 @@ class Address:
     number: int
     city: str
     province: str
-    zip_code: str
