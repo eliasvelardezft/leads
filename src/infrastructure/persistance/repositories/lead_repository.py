@@ -39,5 +39,5 @@ class LeadRepository(IRepository):
         db_lead = lead
         db_lead.id = len(self.leads) + 1
         self.leads.append(db_lead)
-        lead = LeadPersistanceAdapter.persistance_to_domain(db_lead)
-        return lead
+        # lead = LeadPersistanceAdapter.persistance_to_domain(db_lead)
+        return db_lead

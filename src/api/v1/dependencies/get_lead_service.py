@@ -4,7 +4,4 @@ from infrastructure.persistance.repositories import LeadRepository
 
 
 def get_lead_service() -> LeadService:
-    return LeadService(
-        repository=LeadRepository(),
-        persistance_adapter=LeadPersistanceAdapter(),
-    )
+    return LeadService(repository=LeadRepository())

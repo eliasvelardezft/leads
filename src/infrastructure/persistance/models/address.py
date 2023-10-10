@@ -2,7 +2,8 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Address:
+class AddressSQL:
+    id: str
     street: str
     number: int
     city: str

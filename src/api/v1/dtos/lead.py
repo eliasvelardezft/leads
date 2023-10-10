@@ -44,7 +44,7 @@ class LeadCreate(LeadBase):
                         "street": "au",
                         "number": "40",
                         "city": "cba",
-                        "state": "cba",
+                        "province": "cba",
                         "country": "arg"
                     },
                     "career_id": 0,

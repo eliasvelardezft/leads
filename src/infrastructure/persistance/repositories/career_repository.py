@@ -21,7 +21,8 @@ class CareerRepository(IRepository):
     ]
 
     def get(self, id: str) -> Career:
-        db_career = filter(lambda career: career["id"] == id, self.careers)
+        db_career = filter(lambda career: career.id == id, self.careers)
+        db_career = list(db_career)[0]
         career = CareerPersistanceAdapter.persistance_to_domain(db_career)
         return career
 

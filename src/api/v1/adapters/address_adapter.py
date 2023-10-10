@@ -7,7 +7,7 @@ class AddressClientAdapter(IClientAdapter):
     @staticmethod
     def client_to_domain(address: AddressCreate) -> Address:
         return Address(
-            **address.dict(),
+            **address.model_dump(),
         )
     
     @staticmethod

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .subject import Subject
 from .value_objects import Name
@@ -8,4 +8,4 @@ from .value_objects import Name
 class Career:
     name: Name
     description: str
-    subjects: list[Subject] = []
+    subjects: list[Subject] = field(default_factory=list)

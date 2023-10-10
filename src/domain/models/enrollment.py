@@ -1,11 +1,9 @@
 from datetime import datetime
 from dataclasses import dataclass, field
 
-from interfaces.status import IStatus
-from .lead import Lead
-from .course import Course
-from .status import StatusChange, CreatedStatus, StatusChangeAction
 from domain.interfaces import IStatus
+from domain.models import Lead, Course
+from domain.models.status import StatusChangeAction, CreatedStatus, StatusChange
 
 
 @dataclass
