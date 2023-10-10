@@ -1,13 +1,15 @@
 from fastapi import APIRouter, status, Depends, Response
 
-from api.v1.adapters import CareerClientAdapter, SubjectClientAdapter
+from api.v1.adapters import (
+    CareerClientAdapter,
+    SubjectClientAdapter,
+    CourseClientAdapter
+)
 from api.v1.dtos import (
     CareerCreate,
     CareerRead,
     SubjectCreate,
-    SubjectRead,
     CourseCreate,
-    CourseRead
 )
 from api.v1.dependencies import get_admin_service
 from domain.services.admin_service import AdminService
@@ -57,4 +59,19 @@ def create_subject(
     domain_subject = SubjectClientAdapter.client_to_domain(subject)
     created_subject = admin_service.create_subject(subject=domain_subject)
     response.headers["Location"] = f"/admin/subject/{created_subject.id}"
+    return
+
+
+@router.post(
+    "/course",
+    status_code=status.HTTP_201_CREATED,
+)
+def create_course(
+    course: CourseCreate,
+    response: Response,
+    admin_service: AdminService = Depends(get_admin_service),
+):
+    domain_course = CourseClientAdapter.client_to_domain(course)
+    created_course = admin_service.create_course(course=domain_course)
+    response.headers["Location"] = f"/admin/course/{created_course.id}"
     return
