@@ -1,28 +1,36 @@
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum
 
 from domain.interfaces import IStatus
+
+
+class StatusChangeAction(str, Enum):
+    COMPLETE = "complete"
+    PROGRESS = "progress"
+    FAIL = "fail"
+    DROP = "drop"
 
 
 @dataclass
 class CreatedStatus(IStatus):
     def progress(self):
-        pass
+        return ProgressStatus()
 
     def drop(self):
-        pass
+        return DroppedStatus()
 
 
 @dataclass
-class InProgressStatus(IStatus):
+class ProgressStatus(IStatus):
     def complete(self):
-        pass
+        return CompletedStatus()
 
     def fail(self):
-        pass
+        return FailedStatus()
 
     def drop(self):
-        pass
+        return DroppedStatus()
 
 
 @dataclass
@@ -32,6 +40,11 @@ class CompletedStatus(IStatus):
 
 @dataclass
 class FailedStatus(IStatus):
+    pass
+
+
+@dataclass
+class DroppedStatus(IStatus):
     pass
 
 

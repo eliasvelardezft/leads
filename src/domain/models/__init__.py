@@ -1,0 +1,9 @@
+from .address import Address  # noqa
+from .career import Career  # noqa
+from .lead import Lead  # noqa
+from .person import Person  # noqa
+from .value_objects import *  # noqa
+from .course import Course  # noqa
+from .enrollment import Enrollment  # noqa
+from .status import *  # noqa
+from .subject import Subject  # noqa

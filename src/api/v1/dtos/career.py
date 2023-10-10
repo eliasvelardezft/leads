@@ -4,7 +4,7 @@ from domain.models.value_objects import Name
 
 
 class CareerBase(BaseModel):
-    name: Name
+    name: str
     description: str
 
     @validator("name")
