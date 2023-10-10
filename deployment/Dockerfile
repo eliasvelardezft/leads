@@ -16,6 +16,7 @@ ARG DEV
 RUN apt update && \
     apt upgrade -y && \
     apt install -y --no-install-recommends python3-pip && \
+    apt install -y postgresql-client libpq-dev gcc && \
     apt autoremove -y && \
     apt-get clean -y && \
     rm -rf /var/lib/apt/lists/*
@@ -27,6 +28,6 @@ RUN poetry config virtualenvs.create false
 COPY pyproject.toml /app/pyproject.toml
 COPY poetry.lock /app/poetry.lock
 
-RUN if [ "$DEV" ];then poetry install; else poetry install  --only main; fi
+RUN if [ "$DEV" ];then poetry install; else poetry install; fi
 
 COPY ./src /app
