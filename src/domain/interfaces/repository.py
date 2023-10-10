@@ -9,6 +9,9 @@ class IRepository(ABC):
     def get_all() -> list[Any]:
         raise NotImplementedError
 
+    def filter(filter: dict[str, Any]) -> list[Any]:
+        raise NotImplementedError
+
     def create(object: Any) -> Any:
         raise NotImplementedError
 

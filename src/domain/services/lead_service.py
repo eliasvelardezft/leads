@@ -1,5 +1,6 @@
-from domain.models.lead import Lead
+from typing import Any
 
+from domain.models.lead import Lead
 from domain.interfaces.repository import IRepository
 
 
@@ -10,8 +11,17 @@ class LeadService:
     def register_lead(self, lead: Lead) -> Lead:
         return self.repository.create(lead)
 
-    def get_lead(self, id: str) -> Lead:
-        return self.repository.get(id)
+    def filter_leads(
+        self,
+        filters: dict[str, Any],
+    ) -> list[Lead]:
+        if filters:
+            return self.repository.filter(filters=filters)
+        else:
+            return self.get_all_leads()
+
+    def get_lead(self, id: str) -> Lead | None:
+        return self.repository.get(id=id)
 
     def get_all_leads(self) -> list[Lead]:
         return self.repository.get_all()

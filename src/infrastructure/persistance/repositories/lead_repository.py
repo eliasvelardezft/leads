@@ -1,6 +1,10 @@
+from typing import Any
+
 from sqlalchemy.orm import Session
+
 from domain.interfaces import IRepository
 from domain.models import Lead
+from infrastructure.persistance.exceptions import InvalidFilter
 from infrastructure.persistance.base import engine
 from infrastructure.persistance.adapters import LeadPersistanceAdapter
 from infrastructure.persistance.models import LeadSQL
@@ -20,8 +24,14 @@ class LeadRepository(IRepository):
             lead = LeadPersistanceAdapter.persistance_to_domain(db_lead)
         return lead
 
-    def get_all(self) -> list[Lead]:
-        db_leads = self.session.query(LeadSQL).all()
+    def filter(self, filters: dict[str, Any]) -> list[Lead]:
+        query = self.session.query(LeadSQL)
+        for key, value in filters.items():
+            try:
+                query = query.filter(getattr(LeadSQL, key) == value)
+            except Exception as e:
+                raise InvalidFilter(f"Invalid filter: {key}={value}")
+        db_leads = query.all()
         leads = [LeadPersistanceAdapter.persistance_to_domain(lead) for lead in db_leads]
         return leads
 
