@@ -1,6 +1,6 @@
 from domain.interfaces import IRepository
 
-# TODO: implement real repository with sqlalchemy
+
 from collections import namedtuple
 FakeLead = namedtuple("Lead", ["id", "first_name", "last_name", "email"])
 
