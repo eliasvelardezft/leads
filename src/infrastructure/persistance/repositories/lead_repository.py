@@ -1,43 +1,34 @@
+from sqlalchemy.orm import Session
 from domain.interfaces import IRepository
-from infrastructure.persistance.adapters import LeadPersistanceAdapter
 from domain.models import Lead
-
-
-from collections import namedtuple
-FakeLead = namedtuple("Lead", ["id", "first_name", "last_name", "email"])
+from infrastructure.persistance.base import engine
+from infrastructure.persistance.adapters import LeadPersistanceAdapter
+from infrastructure.persistance.models import LeadSQL
 
 
 class LeadRepository(IRepository):
-    leads = [
-        FakeLead(
-            id=1,
-            first_name="Lionel",
-            last_name="Messi",
-            email="lio.messi@gmail.com",
-        ),
-        FakeLead(
-            id=2,
-            first_name="Cristiano",
-            last_name="Ronaldo",
-            email="cristiano.ronaldo@gmail.com",
-        )
-    ]
+    def __init__(self, session: Session | None = None) -> None:
+        if session:
+            self.session = session
+        else:
+            self.session = Session(engine)
 
-    def get(self, id: str) -> Lead:
-        db_lead = filter(lambda lead: lead["id"] == id, self.leads)
-        lead = LeadPersistanceAdapter.persistance_to_domain(db_lead)
+    def get(self, id: str) -> Lead | None:
+        db_lead = self.session.query(LeadSQL).filter(LeadSQL.id == id).first()
+        lead = None
+        if db_lead:
+            lead = LeadPersistanceAdapter.persistance_to_domain(db_lead)
         return lead
 
     def get_all(self) -> list[Lead]:
-        leads = [
-            LeadPersistanceAdapter.persistance_to_domain(lead)
-            for lead in self.leads
-        ]
+        db_leads = self.session.query(LeadSQL).all()
+        leads = [LeadPersistanceAdapter.persistance_to_domain(lead) for lead in db_leads]
         return leads
 
     def create(self, lead: Lead) -> Lead:
-        db_lead = lead
-        db_lead.id = len(self.leads) + 1
-        self.leads.append(db_lead)
-        # lead = LeadPersistanceAdapter.persistance_to_domain(db_lead)
-        return db_lead
+        db_lead = LeadPersistanceAdapter.domain_to_persistance(lead)
+        self.session.add(db_lead)
+        self.session.commit()
+        self.session.refresh(db_lead)
+        lead = LeadPersistanceAdapter.persistance_to_domain(db_lead)
+        return lead
