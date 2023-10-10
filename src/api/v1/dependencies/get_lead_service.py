@@ -1,5 +1,4 @@
 from domain.services.lead_service import LeadService
-from infrastructure.persistance.adapters import LeadPersistanceAdapter
 from infrastructure.persistance.repositories import LeadRepository
 
 

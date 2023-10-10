@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class AddressBase(BaseModel):
     street: str
-    number: str
+    number: int
     city: str
     province: str
     country: str
