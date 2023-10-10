@@ -54,3 +54,8 @@ class StatusChange:
     
     start_date: datetime
     end_date: datetime
+
+    id: str | None = None
+    created_date: str | None = None
+    updated_date: str | None = None
+    deleted_date: str | None = None

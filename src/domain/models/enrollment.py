@@ -11,14 +11,16 @@ class Enrollment:
     lead: Lead
     course: Course
     subjet_times_taken: int
-    created_date: datetime
-    starting_date: datetime
     status_changes: list[StatusChange] = field(
         default_factory=lambda: [StatusChange(
             status=CreatedStatus(),
             start_date=datetime.now()
         )]
     )
+    id: str | None = None
+    created_date: str | None = None
+    updated_date: str | None = None
+    deleted_date: str | None = None
 
     def get_current_status(self) -> IStatus:
         latest_status_change = max(self.status_changes, key=lambda x: x.start_date)
