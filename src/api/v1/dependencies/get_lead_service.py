@@ -1,6 +1,6 @@
 from domain.services.lead_service import LeadService
-from infrastructure.adapters.lead_adapters import LeadPersistanceAdapter
-from infrastructure.repositories import LeadRepository
+from infrastructure.persistance.adapters import LeadPersistanceAdapter
+from infrastructure.persistance.repositories import LeadRepository
 
 
 def get_lead_service() -> LeadService:

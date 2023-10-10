@@ -1,7 +1,7 @@
 from domain.interfaces import IPersistanceAdapter
 from domain.models.lead import Lead
 from domain.models.value_objects import Name, Email
-from infrastructure.db.models import LeadSQL
+from infrastructure.persistance.models import LeadSQL
 
 
 class LeadPersistanceAdapter(IPersistanceAdapter):
