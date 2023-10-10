@@ -26,7 +26,6 @@ class CourseRepository(IRepository):
         return courses
 
     def create(self, course: Course) -> Course:
-        import ipdb; ipdb.set_trace()
         db_course = CoursePersistanceAdapter.domain_to_persistance(course)
         self.session.add(db_course)
         self.session.commit()

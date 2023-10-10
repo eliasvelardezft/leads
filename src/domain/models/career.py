@@ -9,6 +9,7 @@ class Career:
     name: Name
     description: str
     subjects: list[Subject] = field(default_factory=list)
+    subject_ids: list[str] = field(default_factory=list)
 
     id: str | None = None
     created_date: str | None = None

@@ -10,6 +10,7 @@ class CareerClientAdapter(IClientAdapter):
         return Career(
             name=Name(name=career.name),
             description=career.description,
+            subject_ids=career.subject_ids,
         )
     
     @staticmethod
@@ -18,4 +19,5 @@ class CareerClientAdapter(IClientAdapter):
             id=career.id,
             name=career.name.name,
             description=career.description,
+            subject_ids=career.subject_ids,
         )
