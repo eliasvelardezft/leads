@@ -11,14 +11,13 @@ class LeadClientAdapter(IClientAdapter):
     @staticmethod
     def client_to_domain(lead: LeadCreate) -> Lead:
         domain_address = AddressClientAdapter.client_to_domain(lead.address)
-        career = CareerRepository().get(id=lead.career_id)
         return Lead(
             first_name=Name(name=lead.first_name),
             last_name=Name(name=lead.last_name),
             email=Email(email=lead.email),
             phone_number=PhoneNumber(number=lead.phone_number),
             address=domain_address,
-            career=career,
+            career_id=lead.career_id,
             year_of_inscription=Year(year=lead.year_of_inscription),
         )
 
