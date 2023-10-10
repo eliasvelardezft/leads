@@ -15,6 +15,7 @@ class CareerPersistanceAdapter(IPersistanceAdapter):
     @staticmethod
     def persistance_to_domain(career: CareerSQL) -> Career:
         return Career(
+            id=career.id,
             name=Name(name=career.name),
             description=career.description,
         )
