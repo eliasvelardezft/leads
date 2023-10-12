@@ -8,15 +8,17 @@ from domain.models.status import StatusChangeAction, CreatedStatus, StatusChange
 
 @dataclass
 class Enrollment:
-    lead: Lead
-    course: Course
-    subjet_times_taken: int
+    subject_times_taken: int
     status_changes: list[StatusChange] = field(
         default_factory=lambda: [StatusChange(
             status=CreatedStatus(),
             start_date=datetime.now()
         )]
     )
+    lead: Lead | None = None
+    lead_id: int | None = None
+    course: Course | None = None
+    course_id: int | None = None
     id: str | None = None
     created_date: str | None = None
     updated_date: str | None = None

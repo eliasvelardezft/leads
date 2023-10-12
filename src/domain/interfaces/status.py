@@ -2,6 +2,8 @@ from abc import ABC
 
 
 class IStatus(ABC):
+    status: str
+
     def progress(self):
         raise NotImplementedError
 

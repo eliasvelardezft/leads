@@ -19,7 +19,7 @@ class CareerCreate(CareerBase):
 
 class CareerRead(CareerBase):
     id: int
-    subject_ids: list[SubjectRead] | None = []
+    subject_ids: list[int] | None = []
 
 
     class Config:

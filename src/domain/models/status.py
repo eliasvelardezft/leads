@@ -12,8 +12,18 @@ class StatusChangeAction(str, Enum):
     DROP = "drop"
 
 
+class EnrollmentStatus(str, Enum):
+    CREATED = "created"
+    COMPLETED = "completed"
+    PROGRESS = "progress"
+    FAILED = "failed"
+    DROPPED = "dropped"
+
+
 @dataclass
 class CreatedStatus(IStatus):
+    status: EnrollmentStatus = EnrollmentStatus.CREATED
+
     def progress(self):
         return ProgressStatus()
 
@@ -23,6 +33,8 @@ class CreatedStatus(IStatus):
 
 @dataclass
 class ProgressStatus(IStatus):
+    status: EnrollmentStatus = EnrollmentStatus.PROGRESS
+
     def complete(self):
         return CompletedStatus()
 
@@ -35,17 +47,17 @@ class ProgressStatus(IStatus):
 
 @dataclass
 class CompletedStatus(IStatus):
-    pass
+    status: EnrollmentStatus = EnrollmentStatus.COMPLETED
 
 
 @dataclass
 class FailedStatus(IStatus):
-    pass
+    status: EnrollmentStatus = EnrollmentStatus.FAILED
 
 
 @dataclass
 class DroppedStatus(IStatus):
-    pass
+    status: EnrollmentStatus = EnrollmentStatus.DROPPED
 
 
 @dataclass
@@ -53,7 +65,7 @@ class StatusChange:
     status: IStatus
     
     start_date: datetime
-    end_date: datetime
+    end_date: datetime | None = None
 
     id: str | None = None
     created_date: str | None = None

@@ -22,7 +22,7 @@ class CourseClientAdapter(IClientAdapter):
         return CourseRead(
             id=course.id,
             subject=client_subject,
-            subject_id=course.subject_id,
+            subject_id=course.subject.id,
             start_date=course.start_date,
             end_date=course.end_date,
             professor=course.professor,

@@ -29,6 +29,18 @@ class AdminService:
     def create_subject(self, subject: Subject) -> Subject:
         return self.subject_repository.create(subject)
 
+    def get_subject(self, id: str) -> Subject:
+        return self.subject_repository.get(id)
+
+    def get_all_subjects(self) -> list[Subject]:
+        return self.subject_repository.get_all()
+
     # courses
     def create_course(self, course: Course) -> Course:
         return self.course_repository.create(course)
+
+    def get_course(self, id: str) -> Course:
+        return self.course_repository.get(id)
+
+    def get_all_courses(self) -> list[Course]:
+        return self.course_repository.get_all()

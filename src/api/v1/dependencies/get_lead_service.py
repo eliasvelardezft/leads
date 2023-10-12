@@ -1,6 +1,0 @@
-from domain.services.lead_service import LeadService
-from infrastructure.persistance.repositories import LeadRepository
-
-
-def get_lead_service() -> LeadService:
-    return LeadService(repository=LeadRepository())

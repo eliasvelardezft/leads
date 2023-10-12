@@ -8,7 +8,7 @@ from infrastructure.persistance.base import SQLBaseModel
 class StatusChangeSQL(SQLBaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)
     start_date: Mapped[DateTime] = mapped_column(DateTime)
-    end_date: Mapped[DateTime] = mapped_column(DateTime)
+    end_date: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
     status: Mapped[str] = mapped_column(
         Enum(
             "created",

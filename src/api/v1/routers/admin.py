@@ -9,9 +9,11 @@ from api.v1.dtos import (
     CareerCreate,
     CareerRead,
     SubjectCreate,
+    SubjectRead,
     CourseCreate,
+    CourseRead,
 )
-from api.v1.dependencies import get_admin_service
+from api.v1.dependencies.domain_services import get_admin_service
 from domain.services.admin_service import AdminService
 
 
@@ -47,6 +49,22 @@ def get_career(
     return client_career
 
 
+@router.get(
+    "/career",
+    response_model=list[CareerRead],
+    status_code=status.HTTP_200_OK,
+)
+def get_careers(
+    admin_service: AdminService = Depends(get_admin_service),
+):
+    careers = admin_service.get_all_careers()
+    client_careers = [
+        CareerClientAdapter.domain_to_client(career=career)
+        for career in careers
+    ]
+    return client_careers
+
+
 @router.post(
     "/subject",
     status_code=status.HTTP_201_CREATED,
@@ -62,6 +80,36 @@ def create_subject(
     return
 
 
+@router.get(
+    "/subject/{subject_id}",
+    response_model=SubjectRead,
+    status_code=status.HTTP_200_OK,
+)
+def get_subject(
+    subject_id: int,
+    admin_service: AdminService = Depends(get_admin_service),
+):
+    subject = admin_service.get_subject(id=subject_id)
+    client_subject = SubjectClientAdapter.domain_to_client(subject=subject)
+    return client_subject
+
+
+@router.get(
+    "/subject",
+    response_model=list[SubjectRead],
+    status_code=status.HTTP_200_OK,
+)
+def get_subjects(
+    admin_service: AdminService = Depends(get_admin_service),
+):
+    subjects = admin_service.get_all_subjects()
+    client_subjects = [
+        SubjectClientAdapter.domain_to_client(subject=subject)
+        for subject in subjects
+    ]
+    return client_subjects
+
+
 @router.post(
     "/course",
     status_code=status.HTTP_201_CREATED,
@@ -75,3 +123,33 @@ def create_course(
     created_course = admin_service.create_course(course=domain_course)
     response.headers["Location"] = f"/admin/course/{created_course.id}"
     return
+
+
+@router.get(
+    "/course/{course_id}",
+    response_model=CourseRead,
+    status_code=status.HTTP_200_OK,
+)
+def get_course(
+    course_id: int,
+    admin_service: AdminService = Depends(get_admin_service),
+):
+    course = admin_service.get_course(id=course_id)
+    client_course = CourseClientAdapter.domain_to_client(course=course)
+    return client_course
+
+
+@router.get(
+    "/course",
+    response_model=list[CourseRead],
+    status_code=status.HTTP_200_OK,
+)
+def get_courses(
+    admin_service: AdminService = Depends(get_admin_service),
+):
+    courses = admin_service.get_all_courses()
+    client_courses = [
+        CourseClientAdapter.domain_to_client(course=course)
+        for course in courses
+    ]
+    return client_courses

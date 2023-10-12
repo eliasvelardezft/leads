@@ -5,7 +5,7 @@ from fastapi import APIRouter, status, Depends, Response
 from api.v1.exceptions import EntityDoesNotExist
 from api.v1.adapters.lead_adapter import LeadClientAdapter
 from api.v1.dtos.lead import LeadCreate, LeadRead
-from api.v1.dependencies import get_lead_service
+from api.v1.dependencies.domain_services import get_lead_service
 from domain.services.lead_service import LeadService
 
 
