@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from domain.interfaces import IRepository
 from domain.models import Enrollment
-from infrastructure.persistance.exceptions import InvalidFilter
+from domain.exceptions import InvalidFilter
 from infrastructure.persistance.base import engine
 from infrastructure.persistance.adapters import EnrollmentPersistanceAdapter
 from infrastructure.persistance.models import EnrollmentSQL

@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     # database
     DB_USER: str = os.getenv("DB_USER", "postgres")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "postgres")
-    DB_SERVER: str = os.getenv("DB_SERVER", "localhost")
+    DB_SERVER: str = os.getenv("DB_SERVER", "postgres-leads")
     DB_PORT: str = os.getenv("DB_PORT", "5432")
     DB_NAME: str = os.getenv("DB_NAME", "leads")
 
