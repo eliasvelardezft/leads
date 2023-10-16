@@ -1,9 +1,13 @@
+from typing import Any
+
 from sqlalchemy.orm import Session
+
 from domain.interfaces import IRepository
+from domain.exceptions import InvalidFilter
 from domain.models import Course
 from infrastructure.persistance.base import engine
 from infrastructure.persistance.adapters import CoursePersistanceAdapter
-from infrastructure.persistance.models import CourseSQL
+from infrastructure.persistance.models import CourseSQL, SubjectSQL
 
 
 class CourseRepository(IRepository):
@@ -23,6 +27,25 @@ class CourseRepository(IRepository):
     def get_all(self) -> list[Course]:
         db_courses = self.session.query(CourseSQL).all()
         courses = [CoursePersistanceAdapter.persistance_to_domain(course) for course in db_courses]
+        return courses
+
+    def filter(self, filters: dict[str, Any]) -> list[Course]:
+        query = self.session.query(CourseSQL)
+        for key, value in filters.items():
+            try:
+                if key == "subject_id":
+                    query = query.join(
+                        SubjectSQL
+                    ).filter(SubjectSQL.id == value)
+                else:
+                    query = query.filter(getattr(CourseSQL, key) == value)
+            except Exception as e:
+                raise InvalidFilter(f"Invalid filter: {key}={value}")
+        db_courses = query.all()
+        courses = [
+            CoursePersistanceAdapter.persistance_to_domain(Course)
+            for Course in db_courses
+        ]
         return courses
 
     def create(self, course: Course) -> Course:
