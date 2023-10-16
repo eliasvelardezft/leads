@@ -1,13 +1,13 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date
 
 from .subject import Subject
 
 
 @dataclass
 class Course:
-    start_date: datetime
-    end_date: datetime
+    start_date: date
+    end_date: date
     professor: str
     classroom: str
 

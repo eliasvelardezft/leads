@@ -67,3 +67,24 @@ def create_enrollment(
     created_enrollment = enrollment_service.register_enrollment(enrollment=enrollment)
     response.headers["Location"] = f"/enrollments/{created_enrollment.id}"
     return
+
+
+@router.post(
+    "/bulk",
+    status_code=status.HTTP_201_CREATED,
+)
+def create_enrollments(
+    enrollments: list[EnrollmentCreate],
+    response: Response,
+    enrollment_service: EnrollmentService = Depends(get_enrollment_service),
+):
+    domain_enrollments = [
+        EnrollmentClientAdapter.client_to_domain(enrollment)
+        for enrollment in enrollments
+    ]
+    created_enrollments = enrollment_service.register_enrollments(enrollments=domain_enrollments)
+    client_enrollments = [
+        EnrollmentClientAdapter.domain_to_client(enrollment)
+        for enrollment in created_enrollments
+    ]
+    return client_enrollments

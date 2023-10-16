@@ -35,6 +35,9 @@ class AdminService:
     def get_all_subjects(self) -> list[Subject]:
         return self.subject_repository.get_all()
 
+    def filter_subjects(self, filters: dict) -> list[Subject]:
+        return self.subject_repository.filter(filters)
+
     # courses
     def create_course(self, course: Course) -> Course:
         return self.course_repository.create(course)
@@ -44,3 +47,6 @@ class AdminService:
 
     def get_all_courses(self) -> list[Course]:
         return self.course_repository.get_all()
+
+    def filter_courses(self, filters: dict) -> list[Course]:
+        return self.course_repository.filter(filters)

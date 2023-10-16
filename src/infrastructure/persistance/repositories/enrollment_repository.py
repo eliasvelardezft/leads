@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from domain.interfaces import IRepository
 from domain.models import Enrollment
-from infrastructure.persistance.exceptions import InvalidFilter
+from domain.exceptions import InvalidFilter
 from infrastructure.persistance.base import engine
 from infrastructure.persistance.adapters import EnrollmentPersistanceAdapter
 from infrastructure.persistance.models import EnrollmentSQL
@@ -55,3 +55,21 @@ class EnrollmentRepository(IRepository):
         self.session.refresh(db_enrollment)
         enrollment = EnrollmentPersistanceAdapter.persistance_to_domain(db_enrollment)
         return enrollment
+
+    def bulk_create(self, enrollments: list[Enrollment]) -> list[Enrollment]:
+        db_enrollments = [
+            EnrollmentPersistanceAdapter.domain_to_persistance(enrollment)
+            for enrollment in enrollments
+        ]
+        self.session.bulk_save_objects(db_enrollments)
+        self.session.commit()
+
+        db_enrollments = self.session.query(EnrollmentSQL).filter(
+            EnrollmentSQL.id.in_([enrollment.id for enrollment in db_enrollments])
+        ).all()
+
+        enrollments = [
+            EnrollmentPersistanceAdapter.persistance_to_domain(enrollment)
+            for enrollment in db_enrollments
+        ]
+        return enrollments

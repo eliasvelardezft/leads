@@ -1,4 +1,6 @@
-from fastapi import APIRouter, status, Depends, Response
+from typing import Any
+
+from fastapi import APIRouter, status, Depends, Response, Request
 
 from api.v1.adapters import (
     CareerClientAdapter,
@@ -100,9 +102,15 @@ def get_subject(
     status_code=status.HTTP_200_OK,
 )
 def get_subjects(
+    request: Request,
+    career_id: int = None,
     admin_service: AdminService = Depends(get_admin_service),
 ):
-    subjects = admin_service.get_all_subjects()
+    filters = {}
+    if career_id:
+        filters["career_id"] = career_id
+
+    subjects = admin_service.filter_subjects(filters)
     client_subjects = [
         SubjectClientAdapter.domain_to_client(subject=subject)
         for subject in subjects
@@ -145,9 +153,14 @@ def get_course(
     status_code=status.HTTP_200_OK,
 )
 def get_courses(
+    subject_id: int | None = None,
     admin_service: AdminService = Depends(get_admin_service),
 ):
-    courses = admin_service.get_all_courses()
+    filters = {}
+    if subject_id:
+        filters["subject_id"] = subject_id
+
+    courses = admin_service.filter_courses(filters=filters)
     client_courses = [
         CourseClientAdapter.domain_to_client(course=course)
         for course in courses

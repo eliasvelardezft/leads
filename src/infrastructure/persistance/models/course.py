@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import date
 
-from sqlalchemy import String, DateTime, Integer, ForeignKey
+from sqlalchemy import String, Date, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from infrastructure.persistance.base import SQLBaseModel
@@ -8,8 +8,8 @@ from .subject import SubjectSQL
 
 class CourseSQL(SQLBaseModel):
     id: Mapped[int] = mapped_column(primary_key=True)
-    start_date: Mapped[datetime] = mapped_column(DateTime)
-    end_date: Mapped[datetime] = mapped_column(DateTime)
+    start_date: Mapped[date] = mapped_column(Date)
+    end_date: Mapped[date] = mapped_column(Date)
     professor: Mapped[str] = mapped_column(String)
     classroom: Mapped[str] = mapped_column(String)
 
