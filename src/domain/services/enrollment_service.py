@@ -16,12 +16,10 @@ class EnrollmentService:
         self.status_change_repository = status_change_repository
 
     def register_enrollment(self, enrollment: Enrollment) -> Enrollment:
-        # status_change = StatusChange(
-        #     start_date=datetime.now(),
-        #     status=CreatedStatus(),
-        # )
-        # enrollment.
         return self.repository.create(enrollment)
+
+    def register_enrollments(self, enrollments: list[Enrollment]) -> list[Enrollment]:
+        return self.repository.bulk_create(enrollments)
 
     def filter_enrollments(
         self,
