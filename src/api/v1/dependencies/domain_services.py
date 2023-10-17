@@ -13,20 +13,20 @@ from infrastructure.persistance.repositories import (
 )
 
 
-def get_admin_service() -> AdminService:
+def get_admin_service(session = None) -> AdminService:
     return AdminService(
-        career_repository=CareerRepository(),
-        subject_repository=SubjectRepository(),
-        course_repository=CourseRepository(),
+        career_repository=CareerRepository(session),
+        subject_repository=SubjectRepository(session),
+        course_repository=CourseRepository(session),
     )
 
 
-def get_lead_service() -> LeadService:
-    return LeadService(repository=LeadRepository())
+def get_lead_service(session = None) -> LeadService:
+    return LeadService(repository=LeadRepository(session))
 
 
-def get_enrollment_service() -> EnrollmentService:
+def get_enrollment_service(session = None) -> EnrollmentService:
     return EnrollmentService(
-        repository=EnrollmentRepository(),
-        status_change_repository=StatusChangeRepository(),
+        repository=EnrollmentRepository(session),
+        status_change_repository=StatusChangeRepository(session),
     )
