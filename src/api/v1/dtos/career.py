@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 from .subject import SubjectRead
 from domain.models.value_objects import Name
@@ -9,7 +9,7 @@ class CareerBase(BaseModel):
     description: str
     subject_ids: list[int] | None = []
 
-    @validator("name")
+    @field_validator("name")
     def name_validator(cls, value: str) -> str:
         return Name(name=value).name
 
@@ -22,8 +22,9 @@ class CareerRead(CareerBase):
     subject_ids: list[int] | None = []
 
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 
 class CareerUpdate(CareerBase):

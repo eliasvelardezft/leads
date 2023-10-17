@@ -16,8 +16,9 @@ class AddressCreate(AddressBase):
 class AddressRead(AddressBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 
 class AddressUpdate(AddressBase):

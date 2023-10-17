@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 from .subject import SubjectRead
 
@@ -12,7 +12,7 @@ class CourseBase(BaseModel):
     professor: str
     classroom: str
 
-    @validator("start_date", "end_date")
+    @field_validator("start_date", "end_date")
     def date_validator(cls, value: date) -> date:
         if value < date.today():
             raise ValueError("Date must be greater than now")
@@ -27,8 +27,9 @@ class CourseRead(CourseBase):
     id: int
     subject: SubjectRead
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 
 class CourseUpdate(CourseBase):

@@ -28,8 +28,9 @@ class EnrollmentRead(EnrollmentBase):
     id: int
     status_changes: list[StatusChangeRead]
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 
 class LeadUpdate(EnrollmentBase):
