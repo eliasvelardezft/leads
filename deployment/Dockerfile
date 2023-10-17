@@ -11,8 +11,6 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
 
 WORKDIR /app
 
-ARG DEV
-
 RUN apt update && \
     apt upgrade -y && \
     apt install -y --no-install-recommends python3-pip && \
@@ -28,6 +26,6 @@ RUN poetry config virtualenvs.create false
 COPY pyproject.toml /app/pyproject.toml
 COPY poetry.lock /app/poetry.lock
 
-RUN if [ "$DEV" ];then poetry install; else poetry install; fi
+RUN poetry install
 
 COPY ./src /app

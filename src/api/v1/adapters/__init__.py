@@ -5,3 +5,4 @@ from .subject_adapter import SubjectClientAdapter  # noqa
 from .course_adapter import CourseClientAdapter  # noqa
 from .status_change_adapter import StatusChangeClientAdapter  # noqa
 from .status_adapter import StatusClientAdapter  # noqa
+from .enrollment_adapter import EnrollmentClientAdapter  # noqa

@@ -4,7 +4,6 @@ from domain.models import Lead
 from domain.models.value_objects import Name, Email, PhoneNumber, Year
 from api.v1.adapters.address_adapter import AddressClientAdapter
 from api.v1.adapters.career_adapter import CareerClientAdapter
-from infrastructure.persistance.repositories import CareerRepository
 
 
 class LeadClientAdapter(IClientAdapter):

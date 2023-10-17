@@ -27,4 +27,5 @@ class CoursePersistanceAdapter(IPersistanceAdapter):
             professor=course.professor,
             classroom=course.classroom,
             subject=domain_subject,
+            subject_id=course.subject_id,
         )

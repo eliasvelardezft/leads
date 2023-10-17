@@ -1,21 +1,6 @@
-# Build configuration
-# -------------------
-
-APP_NAME := `sed -n 's/^ *name.*=.*"\([^"]*\)".*/\1/p' pyproject.toml`
-APP_VERSION := `sed -n 's/^ *version.*=.*"\([^"]*\)".*/\1/p' pyproject.toml`
-GIT_REVISION = `git rev-parse HEAD`
 CONTAINER_NAME = leads-backend
 PSQL_CONTAINER_NAME = postgres-leads
 
-
-.PHONY: targets
-targets:
-	@echo "\033[34mDevelopment Targets\033[0m"
-	@echo "\033[34m---------------------------------------------------------------\033[0m"
-	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-22s\033[0m %s\n", $$1, $$2}'
-
-# Development targets
-# -------------
 
 .PHONY: run
 run: start
@@ -36,11 +21,11 @@ build: ## build the server
 	docker compose build
 
 .PHONY: dock
-dock: ## Starts the server
+dock: ## Starts the server dettached and attaches the container
 	docker compose up -d && docker attach $(CONTAINER_NAME)
 
 .PHONY: up
-up: ## Starts the server without detaching
+up: ## Starts the server without dett aching
 	docker compose up
 
 .PHONY: down
@@ -82,4 +67,4 @@ generate-migration: ## Generate a new migration
 
 .PHONY: test
 test: ## Run the all tests 
-	docker exec -it $(CONTAINER_NAME) pytest test
+	docker exec -it $(CONTAINER_NAME) pytest test -s
