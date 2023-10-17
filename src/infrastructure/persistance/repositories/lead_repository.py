@@ -19,18 +19,13 @@ class LeadRepository(IRepository):
             self.session = Session(engine)
 
     def get(self, id: str) -> Lead | None:
-        db_lead = self.session.query(LeadSQL).filter(LeadSQL.id == id).first()
+        db_lead = self.session.get(LeadSQL, id)
         lead = None
         if db_lead:
             lead = LeadPersistanceAdapter.persistance_to_domain(db_lead)
         return lead
 
-    def get_all(self) -> list[Lead]:
-        db_leads = self.session.query(LeadSQL).all()
-        leads = [LeadPersistanceAdapter.persistance_to_domain(lead) for lead in db_leads]
-        return leads
-
-    def filter(self, filters: dict[str, Any]) -> list[Lead]:
+    def filter(self, filters: dict[str, Any] = {}) -> list[Lead]:
         query = self.session.query(LeadSQL)
         for key, value in filters.items():
             try:

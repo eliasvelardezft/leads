@@ -8,20 +8,14 @@ class LeadService:
     def __init__(self, repository: IRepository):
         self.repository = repository
 
-    def register_lead(self, lead: Lead) -> Lead:
+    def create_lead(self, lead: Lead) -> Lead:
         return self.repository.create(lead)
 
-    def filter_leads(
+    def get_leads(
         self,
-        filters: dict[str, Any],
+        filters: dict[str, Any] = {},
     ) -> list[Lead]:
-        if filters:
-            return self.repository.filter(filters=filters)
-        else:
-            return self.get_all_leads()
+        return self.repository.filter(filters=filters)
 
     def get_lead(self, id: str) -> Lead | None:
         return self.repository.get(id=id)
-
-    def get_all_leads(self) -> list[Lead]:
-        return self.repository.get_all()

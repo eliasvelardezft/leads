@@ -18,18 +18,13 @@ class SubjectRepository(IRepository):
             self.session = Session(engine)
 
     def get(self, id: str) -> Subject | None:
-        db_subject = self.session.query(SubjectSQL).filter(SubjectSQL.id == id).first()
+        db_subject = self.session.get(SubjectSQL, id)
         subject = None
         if db_subject:
             subject = SubjectPersistanceAdapter.persistance_to_domain(db_subject)
         return subject
-
-    def get_all(self) -> list[Subject]:
-        db_subjects = self.session.query(SubjectSQL).all()
-        subjects = [SubjectPersistanceAdapter.persistance_to_domain(subject) for subject in db_subjects]
-        return subjects
     
-    def filter(self, filters: dict[str, Any]) -> list[Subject]:
+    def filter(self, filters: dict[str, Any] = {}) -> list[Subject]:
         query = self.session.query(SubjectSQL)
         for key, value in filters.items():
             try:

@@ -1,6 +1,8 @@
+from typing import Any
 from sqlalchemy.orm import Session
 from domain.interfaces import IRepository
 from domain.models import Career
+from domain.exceptions import InvalidFilter
 from infrastructure.persistance.base import engine
 from infrastructure.persistance.adapters import CareerPersistanceAdapter
 from infrastructure.persistance.models import CareerSQL
@@ -13,17 +15,12 @@ class CareerRepository(IRepository):
         else:
             self.session = Session(engine)
 
-    def get(self, id: str) -> Career | None:
-        db_career = self.session.query(CareerSQL).filter(CareerSQL.id == id).first()
+    def get(self, id: int) -> Career | None:
+        db_career = self.session.get(CareerSQL, id)
         career = None
         if db_career:
             career = CareerPersistanceAdapter.persistance_to_domain(db_career)
         return career
-
-    def get_all(self) -> list[Career]:
-        db_careers = self.session.query(CareerSQL).all()
-        careers = [CareerPersistanceAdapter.persistance_to_domain(career) for career in db_careers]
-        return careers
 
     def create(self, career: Career) -> Career:
         db_career = CareerPersistanceAdapter.domain_to_persistance(career)
@@ -32,3 +29,16 @@ class CareerRepository(IRepository):
         self.session.refresh(db_career)
         career = CareerPersistanceAdapter.persistance_to_domain(db_career)
         return career
+
+    def filter(self, filters: dict[str, Any] = {}) -> list[Career]:
+        query = self.session.query(CareerSQL)
+
+        for key, value in filters.items():
+            try:
+                query = query.filter(getattr(CareerSQL, key) == value)
+            except Exception as e:
+                raise InvalidFilter(f"Invalid filter: {key}={value}")
+        db_careers = query.all() 
+        careers = [CareerPersistanceAdapter.persistance_to_domain(career) for career in db_careers]
+        return careers
+

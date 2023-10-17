@@ -24,13 +24,15 @@ def get_enrollments(
 ):
     filters = {}
     if lead_email:
-        filters["email"] = lead_email
-        return enrollment_service.filter_by_lead(filters=filters)
-
-    if lead_id:
+        filters = {
+            "lead": {
+                "email": lead_email,
+            }
+        }
+    elif lead_id:
         filters["lead_id"] = lead_id
 
-    enrollments = enrollment_service.filter_enrollments(filters=filters)
+    enrollments = enrollment_service.get_enrollments(filters=filters)
     client_enrollments = [
         EnrollmentClientAdapter.domain_to_client(enrollment)
         for enrollment in enrollments
@@ -64,9 +66,9 @@ def create_enrollment(
     enrollment_service: EnrollmentService = Depends(get_enrollment_service),
 ):
     enrollment = EnrollmentClientAdapter.client_to_domain(enrollment)
-    created_enrollment = enrollment_service.register_enrollment(enrollment=enrollment)
-    response.headers["Location"] = f"/enrollments/{created_enrollment.id}"
-    return
+    created_enrollment = enrollment_service.create_enrollment(enrollment=enrollment)
+    client_enrollment = EnrollmentClientAdapter.domain_to_client(created_enrollment)
+    return client_enrollment
 
 
 @router.post(
@@ -82,7 +84,7 @@ def create_enrollments(
         EnrollmentClientAdapter.client_to_domain(enrollment)
         for enrollment in enrollments
     ]
-    created_enrollments = enrollment_service.register_enrollments(enrollments=domain_enrollments)
+    created_enrollments = enrollment_service.create_enrollments(enrollments=domain_enrollments)
     client_enrollments = [
         EnrollmentClientAdapter.domain_to_client(enrollment)
         for enrollment in created_enrollments

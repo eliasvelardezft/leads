@@ -1,3 +1,5 @@
+from typing import Any
+
 from domain.models import Career, Subject, Course
 
 from domain.interfaces.repository import IRepository
@@ -22,8 +24,8 @@ class AdminService:
     def get_career(self, id: str) -> Career:
         return self.career_repository.get(id)
 
-    def get_all_careers(self) -> list[Career]:
-        return self.career_repository.get_all()
+    def get_careers(self, filters: dict[str, Any]) -> list[Career]:
+        return self.career_repository.filter(filters)
 
     # subjects
     def create_subject(self, subject: Subject) -> Subject:
@@ -32,10 +34,7 @@ class AdminService:
     def get_subject(self, id: str) -> Subject:
         return self.subject_repository.get(id)
 
-    def get_all_subjects(self) -> list[Subject]:
-        return self.subject_repository.get_all()
-
-    def filter_subjects(self, filters: dict) -> list[Subject]:
+    def get_subjects(self, filters: dict[str, Any]) -> list[Subject]:
         return self.subject_repository.filter(filters)
 
     # courses
@@ -45,8 +44,5 @@ class AdminService:
     def get_course(self, id: str) -> Course:
         return self.course_repository.get(id)
 
-    def get_all_courses(self) -> list[Course]:
-        return self.course_repository.get_all()
-
-    def filter_courses(self, filters: dict) -> list[Course]:
+    def get_courses(self, filters: dict[str, Any]) -> list[Course]:
         return self.course_repository.filter(filters)

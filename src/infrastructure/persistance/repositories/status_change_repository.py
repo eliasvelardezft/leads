@@ -1,6 +1,10 @@
+from typing import Any
+
 from sqlalchemy.orm import Session
+
 from domain.interfaces import IRepository
 from domain.models import StatusChange
+from domain.exceptions import InvalidFilter
 from infrastructure.persistance.base import engine
 from infrastructure.persistance.adapters import StatusChangePersistanceAdapter
 from infrastructure.persistance.models import StatusChangeSQL
@@ -20,8 +24,14 @@ class StatusChangeRepository(IRepository):
             status_change = StatusChangePersistanceAdapter.persistance_to_domain(db_status_change)
         return status_change
 
-    def get_all(self) -> list[StatusChange]:
-        db_status_changes = self.session.query(StatusChangeSQL).all()
+    def filter(self, filters: dict[str, Any] = {}) -> list[StatusChange]:
+        query = self.session.query(StatusChangeSQL)
+        for key, value in filters.items():
+            try:
+                query = query.filter(getattr(StatusChangeSQL, key) == value)
+            except Exception as e:
+                raise InvalidFilter(f"Invalid filter: {key}={value}")
+        db_status_changes = query.all()
         status_changes = [StatusChangePersistanceAdapter.persistance_to_domain(status_change) for status_change in db_status_changes]
         return status_changes
 

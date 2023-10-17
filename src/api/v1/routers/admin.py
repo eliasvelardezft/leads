@@ -59,7 +59,7 @@ def get_career(
 def get_careers(
     admin_service: AdminService = Depends(get_admin_service),
 ):
-    careers = admin_service.get_all_careers()
+    careers = admin_service.get_careers()
     client_careers = [
         CareerClientAdapter.domain_to_client(career=career)
         for career in careers
@@ -110,7 +110,7 @@ def get_subjects(
     if career_id:
         filters["career_id"] = career_id
 
-    subjects = admin_service.filter_subjects(filters)
+    subjects = admin_service.get_subjects(filters)
     client_subjects = [
         SubjectClientAdapter.domain_to_client(subject=subject)
         for subject in subjects
@@ -160,7 +160,7 @@ def get_courses(
     if subject_id:
         filters["subject_id"] = subject_id
 
-    courses = admin_service.filter_courses(filters=filters)
+    courses = admin_service.get_courses(filters=filters)
     client_courses = [
         CourseClientAdapter.domain_to_client(course=course)
         for course in courses

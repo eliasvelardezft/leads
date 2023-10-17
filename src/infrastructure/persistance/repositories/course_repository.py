@@ -17,19 +17,22 @@ class CourseRepository(IRepository):
         else:
             self.session = Session(engine)
 
-    def get(self, id: str) -> Course | None:
-        db_course = self.session.query(CourseSQL).filter(CourseSQL.id == id).first()
+    def get(self, id: int) -> Course | None:
+        db_course = self.session.get(CourseSQL, id)
         course = None
         if db_course:
             course = CoursePersistanceAdapter.persistance_to_domain(db_course)
         return course
 
-    def get_all(self) -> list[Course]:
-        db_courses = self.session.query(CourseSQL).all()
-        courses = [CoursePersistanceAdapter.persistance_to_domain(course) for course in db_courses]
-        return courses
+    def create(self, course: Course) -> Course:
+        db_course = CoursePersistanceAdapter.domain_to_persistance(course)
+        self.session.add(db_course)
+        self.session.commit()
+        self.session.refresh(db_course)
+        course = CoursePersistanceAdapter.persistance_to_domain(db_course)
+        return course
 
-    def filter(self, filters: dict[str, Any]) -> list[Course]:
+    def filter(self, filters: dict[str, Any] = {}) -> list[Course]:
         query = self.session.query(CourseSQL)
         for key, value in filters.items():
             try:
@@ -47,11 +50,3 @@ class CourseRepository(IRepository):
             for Course in db_courses
         ]
         return courses
-
-    def create(self, course: Course) -> Course:
-        db_course = CoursePersistanceAdapter.domain_to_persistance(course)
-        self.session.add(db_course)
-        self.session.commit()
-        self.session.refresh(db_course)
-        course = CoursePersistanceAdapter.persistance_to_domain(db_course)
-        return course

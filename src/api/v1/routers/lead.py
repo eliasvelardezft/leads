@@ -25,7 +25,7 @@ def get_leads(
     if email:
         filters["email"] = email
 
-    domain_leads = lead_service.filter_leads(filters=filters)
+    domain_leads = lead_service.get_leads(filters=filters)
     client_leads = [
         LeadClientAdapter.domain_to_client(lead)
         for lead in domain_leads
@@ -60,7 +60,7 @@ def create_lead(
 ):
     domain_lead = LeadClientAdapter.client_to_domain(lead)
     try:
-        created_lead = lead_service.register_lead(lead=domain_lead)
+        created_lead = lead_service.create_lead(lead=domain_lead)
     except LeadAlreadyExists:
         raise EntityAlreadyExists
     return created_lead.id
