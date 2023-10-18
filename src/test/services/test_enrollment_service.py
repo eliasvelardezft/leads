@@ -33,11 +33,13 @@ class TestEnrollmentService(BaseTestClass):
     ):
         self._generate_support_objects()
         self._generate_lead()
+        self._generate_lead(id="2")
 
         enrollment1 = domain_enrollment
 
         enrollment2 = replace(domain_enrollment)
         enrollment2.subject_times_taken = 2
+        enrollment2.lead_id = 2
 
         enrollments = test_enrollment_service.create_enrollments(
             [enrollment1, enrollment2]
@@ -59,11 +61,13 @@ class TestEnrollmentService(BaseTestClass):
     ):
         self._generate_support_objects()
         self._generate_lead()
+        self._generate_lead(id="2")
 
         enrollment1 = domain_enrollment
 
         enrollment2 = replace(domain_enrollment)
         enrollment2.subject_times_taken = 2
+        enrollment2.lead_id = 2
 
         test_enrollment_service.create_enrollments(
             [enrollment1, enrollment2]
@@ -136,11 +140,13 @@ class TestEnrollmentService(BaseTestClass):
     ):
         self._generate_support_objects()
         self._generate_lead()
+        self._generate_lead(id="2")
 
         enrollment1 = domain_enrollment
 
         enrollment2 = replace(domain_enrollment)
         enrollment2.subject_times_taken = 2
+        enrollment2.lead_id = 2
 
         test_enrollment_service.create_enrollments(
             [enrollment1, enrollment2]

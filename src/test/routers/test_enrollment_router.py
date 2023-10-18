@@ -25,11 +25,13 @@ class TestEnrollmentRouter(BaseTestClass):
     def test_create_enrollment_bulk(self, client, enrollment_create):
         self._generate_support_objects()
         self._generate_lead()
+        self._generate_lead(id=2)
 
         enrollment1 = enrollment_create
 
         enrollment2 = enrollment_create.model_copy()
         enrollment2.subject_times_taken = 2
+        enrollment2.lead_id = 2
 
         response = client.post('/api/v1/enrollments/bulk', json=[enrollment1.model_dump(), enrollment2.model_dump()])
         enrollments = response.json()
@@ -46,11 +48,13 @@ class TestEnrollmentRouter(BaseTestClass):
         assert response.json()['detail'] == 'entity_does_not_exist'
 
         self._generate_lead()
+        self._generate_lead(id="2")
         
         enrollment1 = enrollment_create
 
         enrollment2 = enrollment_create.model_copy()
         enrollment2.subject_times_taken = 2
+        enrollment2.lead_id = 2
 
         response = client.post('/api/v1/enrollments', json=enrollment1.model_dump())
         response = client.post('/api/v1/enrollments', json=enrollment2.model_dump())
@@ -76,7 +80,7 @@ class TestEnrollmentRouter(BaseTestClass):
         response = client.get(f'/api/v1/enrollments?lead_id={enrollment1.lead_id}')
         assert response.status_code == 200
         enrollments = response.json()
-        assert len(enrollments) == 2
+        assert len(enrollments) == 1
         assert enrollments[0]['id'] == 1
         assert enrollments[0]['subject_times_taken'] == enrollment1.subject_times_taken
         assert enrollments[0]['lead_id'] == enrollment1.lead_id
