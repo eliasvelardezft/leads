@@ -4,3 +4,7 @@ class LeadAlreadyExists(Exception):
 
 class InvalidFilter(Exception):
     pass
+
+
+class EnrollmentAlreadyExists(Exception):
+    pass

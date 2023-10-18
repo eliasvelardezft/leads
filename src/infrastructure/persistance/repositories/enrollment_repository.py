@@ -1,10 +1,11 @@
 from typing import Any
 
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from domain.interfaces import IRepository
 from domain.models import Enrollment
-from domain.exceptions import InvalidFilter
+from domain.exceptions import InvalidFilter, EnrollmentAlreadyExists
 from infrastructure.persistance.base import engine
 from infrastructure.persistance.adapters import EnrollmentPersistanceAdapter
 from infrastructure.persistance.models import EnrollmentSQL
@@ -44,7 +45,10 @@ class EnrollmentRepository(IRepository):
     def create(self, enrollment: Enrollment) -> Enrollment:
         db_enrollment = EnrollmentPersistanceAdapter.domain_to_persistance(enrollment)
         self.session.add(db_enrollment)
-        self.session.commit()
+        try:
+            self.session.commit()
+        except IntegrityError:
+            raise EnrollmentAlreadyExists
         self.session.refresh(db_enrollment)
         enrollment = EnrollmentPersistanceAdapter.persistance_to_domain(db_enrollment)
         return enrollment
@@ -55,7 +59,11 @@ class EnrollmentRepository(IRepository):
             for enrollment in enrollments
         ]
         self.session.add_all(db_enrollments)
-        self.session.commit()
+
+        try:
+            self.session.commit()
+        except IntegrityError:
+            raise EnrollmentAlreadyExists
 
         enrollments = [
             EnrollmentPersistanceAdapter.persistance_to_domain(enrollment)

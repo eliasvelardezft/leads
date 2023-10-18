@@ -2,12 +2,12 @@ from typing import Any
 
 from fastapi import APIRouter, status, Depends, Response
 
-from api.v1.exceptions import EntityDoesNotExist
+from api.v1.exceptions import EntityDoesNotExist, EntityAlreadyExists
 from api.v1.adapters.enrollment_adapter import EnrollmentClientAdapter
 from api.v1.dtos.enrollment import EnrollmentCreate, EnrollmentRead
 from api.v1.dependencies.domain_services import get_enrollment_service
 from domain.services.enrollment_service import EnrollmentService
-
+from domain.exceptions import EnrollmentAlreadyExists
 
 router = APIRouter()
 
@@ -66,7 +66,10 @@ def create_enrollment(
     enrollment_service: EnrollmentService = Depends(get_enrollment_service),
 ):
     enrollment = EnrollmentClientAdapter.client_to_domain(enrollment)
-    created_enrollment = enrollment_service.create_enrollment(enrollment=enrollment)
+    try:
+        created_enrollment = enrollment_service.create_enrollment(enrollment=enrollment)
+    except EnrollmentAlreadyExists:
+        raise EntityAlreadyExists
     client_enrollment = EnrollmentClientAdapter.domain_to_client(created_enrollment)
     return client_enrollment
 
@@ -84,7 +87,10 @@ def create_enrollments(
         EnrollmentClientAdapter.client_to_domain(enrollment)
         for enrollment in enrollments
     ]
-    created_enrollments = enrollment_service.create_enrollments(enrollments=domain_enrollments)
+    try:
+        created_enrollments = enrollment_service.create_enrollments(enrollments=domain_enrollments)
+    except EnrollmentAlreadyExists:
+        raise EntityAlreadyExists
     client_enrollments = [
         EnrollmentClientAdapter.domain_to_client(enrollment)
         for enrollment in created_enrollments

@@ -24,7 +24,7 @@ class AdminService:
     def get_career(self, id: str) -> Career:
         return self.career_repository.get(id)
 
-    def get_careers(self, filters: dict[str, Any]) -> list[Career]:
+    def get_careers(self, filters: dict[str, Any] = {}) -> list[Career]:
         return self.career_repository.filter(filters)
 
     # subjects
@@ -34,7 +34,7 @@ class AdminService:
     def get_subject(self, id: str) -> Subject:
         return self.subject_repository.get(id)
 
-    def get_subjects(self, filters: dict[str, Any]) -> list[Subject]:
+    def get_subjects(self, filters: dict[str, Any] = {}) -> list[Subject]:
         return self.subject_repository.filter(filters)
 
     # courses
@@ -44,5 +44,5 @@ class AdminService:
     def get_course(self, id: str) -> Course:
         return self.course_repository.get(id)
 
-    def get_courses(self, filters: dict[str, Any]) -> list[Course]:
+    def get_courses(self, filters: dict[str, Any] = {}) -> list[Course]:
         return self.course_repository.filter(filters)
