@@ -20,7 +20,7 @@ class StatusChangeSQL(SQLBaseModel):
         )
     )
 
-    enrollment_id: Mapped[int] = mapped_column(Integer, ForeignKey("enrollment.id"))
+    enrollment_id: Mapped[int] = mapped_column(Integer, ForeignKey("enrollment.id", ondelete="CASCADE"))
     enrollment: Mapped[EnrollmentSQL] = relationship(
         "EnrollmentSQL",
         back_populates="status_changes"
