@@ -13,5 +13,6 @@ class SubjectSQL(SQLBaseModel):
     careers = relationship(
         'CareerSQL',
         secondary=career_subject_association,
-        back_populates='subjects'
+        back_populates='subjects',
+        viewonly=True,
     )

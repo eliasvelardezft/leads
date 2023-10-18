@@ -21,7 +21,8 @@ class CareerSQL(SQLBaseModel):
     subjects = relationship(
         'SubjectSQL',
         secondary=career_subject_association,
-        back_populates='careers'
+        back_populates='careers',
+        viewonly=True,
     )
     subject_associations: Mapped[list["SubjectAssociation"]] = relationship(
         "SubjectAssociation",
@@ -37,4 +38,7 @@ class CareerSQL(SQLBaseModel):
 
 class SubjectAssociation(Base):
     __table__ = career_subject_association
-    career = relationship(CareerSQL, back_populates="subject_associations")
+    career: Mapped[CareerSQL] = relationship(
+        CareerSQL,
+        back_populates="subject_associations"
+    )
