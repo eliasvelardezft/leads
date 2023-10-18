@@ -1,11 +1,12 @@
 from typing import Any
 
+from psycopg2 import errors
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
 from domain.interfaces import IRepository
 from domain.models import Enrollment
-from domain.exceptions import InvalidFilter, EnrollmentAlreadyExists
+from domain.exceptions import InvalidFilter, LeadAlreadyEnrolledToCourse, LeadDoesNotExist
 from infrastructure.persistance.base import engine
 from infrastructure.persistance.adapters import EnrollmentPersistanceAdapter
 from infrastructure.persistance.models import EnrollmentSQL
@@ -47,8 +48,13 @@ class EnrollmentRepository(IRepository):
         self.session.add(db_enrollment)
         try:
             self.session.commit()
-        except IntegrityError:
-            raise EnrollmentAlreadyExists
+        except IntegrityError as sa_error:
+            try:
+                raise sa_error.orig
+            except errors.ForeignKeyViolation:
+                raise LeadDoesNotExist
+            except errors.UniqueViolation:
+                raise LeadAlreadyEnrolledToCourse
         self.session.refresh(db_enrollment)
         enrollment = EnrollmentPersistanceAdapter.persistance_to_domain(db_enrollment)
         return enrollment
@@ -62,8 +68,13 @@ class EnrollmentRepository(IRepository):
 
         try:
             self.session.commit()
-        except IntegrityError:
-            raise EnrollmentAlreadyExists
+        except IntegrityError as sa_error:
+            try:
+                raise sa_error.orig
+            except errors.ForeignKeyViolation:
+                raise LeadDoesNotExist
+            except errors.UniqueViolation:
+                raise LeadAlreadyEnrolledToCourse
 
         enrollments = [
             EnrollmentPersistanceAdapter.persistance_to_domain(enrollment)

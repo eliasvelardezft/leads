@@ -72,7 +72,7 @@ class BaseTestClass:
             first_name='Charly',
             last_name='Garcia',
             email=f"charly.snm{id}@gmail.com",
-            phone_number="+3515555555",
+            phone_number="3515555555",
             career_id=1,
             address=address_sql,
             year_of_inscription=2021,

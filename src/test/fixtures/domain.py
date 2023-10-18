@@ -53,7 +53,7 @@ def domain_lead(domain_career, domain_address):
         last_name=Name(name='Messi'),
         year_of_inscription=Year(year=2021),
         email=Email(email="liomessi@gmail.com"),
-        phone_number=PhoneNumber(number="+1234567890"),
+        phone_number=PhoneNumber(number="1234567890"),
         address=domain_address,
         career=domain_career,
         career_id=domain_career.id,

@@ -16,11 +16,21 @@ class DetailedHTTPException(HTTPException):
         )
 
 
-class EntityDoesNotExist(DetailedHTTPException):
+class LeadDoesNotExist(DetailedHTTPException):
     STATUS_CODE = status.HTTP_404_NOT_FOUND
-    DETAIL = "entity_does_not_exist"
+    DETAIL = "lead_does_not_exist"
 
 
-class EntityAlreadyExists(DetailedHTTPException):
+class LeadAlreadyEnrolledToCourse(DetailedHTTPException):
     STATUS_CODE = status.HTTP_409_CONFLICT
-    DETAIL = "entity_already_exists"
+    DETAIL = "lead_already_enrolled_to_course"
+
+
+class LeadAlreadyExists(DetailedHTTPException):
+    STATUS_CODE = status.HTTP_409_CONFLICT
+    DETAIL = "lead_already_exists"
+
+
+class EnrollmentDoesNotExist(DetailedHTTPException):
+    STATUS_CODE = status.HTTP_404_NOT_FOUND
+    DETAIL = "enrollment_does_not_exist"

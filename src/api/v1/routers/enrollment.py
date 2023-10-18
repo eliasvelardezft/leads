@@ -2,12 +2,16 @@ from typing import Any
 
 from fastapi import APIRouter, status, Depends, Response
 
-from api.v1.exceptions import EntityDoesNotExist, EntityAlreadyExists
+from api.v1.exceptions import (
+    EnrollmentDoesNotExist,
+    LeadAlreadyEnrolledToCourse as LeadAlreadyEnrolledToCourseApiException,
+    LeadDoesNotExist as LeadDoesNotExistApiException,
+)
 from api.v1.adapters.enrollment_adapter import EnrollmentClientAdapter
 from api.v1.dtos.enrollment import EnrollmentCreate, EnrollmentRead
 from api.v1.dependencies.domain_services import get_enrollment_service
 from domain.services.enrollment_service import EnrollmentService
-from domain.exceptions import EnrollmentAlreadyExists
+from domain.exceptions import LeadDoesNotExist, LeadAlreadyEnrolledToCourse
 
 router = APIRouter()
 
@@ -51,7 +55,7 @@ def get_enrollment(
 ):
     enrollment = enrollment_service.get_enrollment(id=enrollment_id)
     if not enrollment:
-        raise EntityDoesNotExist
+        raise EnrollmentDoesNotExist
     client_enrollment = EnrollmentClientAdapter.domain_to_client(enrollment)
     return client_enrollment
 
@@ -68,8 +72,10 @@ def create_enrollment(
     enrollment = EnrollmentClientAdapter.client_to_domain(enrollment)
     try:
         created_enrollment = enrollment_service.create_enrollment(enrollment=enrollment)
-    except EnrollmentAlreadyExists:
-        raise EntityAlreadyExists
+    except LeadAlreadyEnrolledToCourse:
+        raise LeadAlreadyEnrolledToCourseApiException
+    except LeadDoesNotExist:
+        raise LeadDoesNotExistApiException
     client_enrollment = EnrollmentClientAdapter.domain_to_client(created_enrollment)
     return client_enrollment
 
@@ -89,8 +95,10 @@ def create_enrollments(
     ]
     try:
         created_enrollments = enrollment_service.create_enrollments(enrollments=domain_enrollments)
-    except EnrollmentAlreadyExists:
-        raise EntityAlreadyExists
+    except LeadAlreadyEnrolledToCourse:
+        raise LeadAlreadyEnrolledToCourseApiException
+    except LeadDoesNotExist:
+        raise LeadDoesNotExistApiException
     client_enrollments = [
         EnrollmentClientAdapter.domain_to_client(enrollment)
         for enrollment in created_enrollments

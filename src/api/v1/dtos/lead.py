@@ -39,7 +39,7 @@ class LeadCreate(LeadBase):
                     "email": "eliasvelardez@gmail.com",
                     "first_name": "elias",
                     "last_name": "velardez",
-                    "phone_number": "+541234567",
+                    "phone_number": "541234567",
                     "address": {
                         "street": "au",
                         "number": "40",

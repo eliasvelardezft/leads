@@ -6,5 +6,9 @@ class InvalidFilter(Exception):
     pass
 
 
-class EnrollmentAlreadyExists(Exception):
+class LeadAlreadyEnrolledToCourse(Exception):
+    pass
+
+
+class LeadDoesNotExist(Exception):
     pass

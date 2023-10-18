@@ -54,7 +54,7 @@ def lead_create(address_create) -> LeadCreate:
         first_name='Lionel',
         last_name='Messi',
         email='liomessi@gmail.com',
-        phone_number='+1234567',
+        phone_number='1234567',
         address=address_create,
         year_of_inscription=2021,
         career_id=1,

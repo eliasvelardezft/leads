@@ -231,7 +231,7 @@ class TestAdapters(BaseTestClass):
             first_name='John',
             last_name='Doe',
             email='john.doe@example.com',
-            phone_number='+1234567890',
+            phone_number='1234567890',
             address=address_create,
             career_id=1,
             year_of_inscription=2022
@@ -241,7 +241,7 @@ class TestAdapters(BaseTestClass):
         assert lead.first_name == Name(name='John')
         assert lead.last_name == Name(name='Doe')
         assert lead.email == Email(email='john.doe@example.com')
-        assert lead.phone_number == PhoneNumber(number='+1234567890')
+        assert lead.phone_number == PhoneNumber(number='1234567890')
         assert lead.career_id == 1
         assert lead.year_of_inscription == Year(year=2022)
 
@@ -263,7 +263,7 @@ class TestAdapters(BaseTestClass):
         assert domain_lead.first_name == Name(name='John')
         assert domain_lead.last_name == Name(name='Doe')
         assert domain_lead.email == Email(email="john.doe@example.com")
-        assert domain_lead.phone_number == PhoneNumber(number="+1234567890")
+        assert domain_lead.phone_number == PhoneNumber(number="1234567890")
         assert domain_lead.year_of_inscription == Year(year=2022)
 
         lead_read = LeadClientAdapter.domain_to_client(domain_lead)

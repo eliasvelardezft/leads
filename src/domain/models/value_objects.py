@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 
 class PhoneNumber(BaseModel):
-    number: str = Field(pattern=r"^\+\d{1,3}\d{1,14}$")
+    number: str = Field(pattern=r"^\d{1,3}\d{1,14}$")
 
 
 class Name(BaseModel):

@@ -2,7 +2,10 @@ from typing import Any
 
 from fastapi import APIRouter, status, Depends
 from domain.exceptions import LeadAlreadyExists
-from api.v1.exceptions import EntityDoesNotExist, EntityAlreadyExists
+from api.v1.exceptions import (
+    LeadDoesNotExist,
+    LeadAlreadyExists as LeadAlreadyExistsApiException,
+)
 from api.v1.adapters.lead_adapter import LeadClientAdapter
 from api.v1.dtos.lead import LeadCreate, LeadRead
 from api.v1.dependencies.domain_services import get_lead_service
@@ -44,7 +47,7 @@ def get_lead(
 ):
     domain_lead = lead_service.get_lead(id=lead_id)
     if not domain_lead:
-        raise EntityDoesNotExist
+        raise LeadDoesNotExist
 
     client_lead = LeadClientAdapter.domain_to_client(domain_lead)
     return client_lead
@@ -62,5 +65,5 @@ def create_lead(
     try:
         created_lead = lead_service.create_lead(lead=domain_lead)
     except LeadAlreadyExists:
-        raise EntityAlreadyExists
+        raise LeadAlreadyExistsApiException
     return created_lead.id
