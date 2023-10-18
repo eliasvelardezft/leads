@@ -1,8 +1,8 @@
 """initial migration
 
-Revision ID: 0e7d2011897e
+Revision ID: ccc00885537d
 Revises: 
-Create Date: 2023-10-10 17:18:44.560488
+Create Date: 2023-10-18 13:38:27.249485
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0e7d2011897e'
+revision: str = 'ccc00885537d'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -56,15 +56,16 @@ def upgrade() -> None:
     op.create_index(op.f('ix_subject_deleted_date'), 'subject', ['deleted_date'], unique=False)
     op.create_index(op.f('ix_subject_name'), 'subject', ['name'], unique=True)
     op.create_table('career_subject_association',
-    sa.Column('career_id', sa.Integer(), nullable=True),
-    sa.Column('subject_id', sa.Integer(), nullable=True),
+    sa.Column('career_id', sa.Integer(), nullable=False),
+    sa.Column('subject_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['career_id'], ['career.id'], ),
-    sa.ForeignKeyConstraint(['subject_id'], ['subject.id'], )
+    sa.ForeignKeyConstraint(['subject_id'], ['subject.id'], ),
+    sa.PrimaryKeyConstraint('career_id', 'subject_id')
     )
     op.create_table('course',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('start_date', sa.DateTime(), nullable=False),
-    sa.Column('end_date', sa.DateTime(), nullable=False),
+    sa.Column('start_date', sa.Date(), nullable=False),
+    sa.Column('end_date', sa.Date(), nullable=False),
     sa.Column('professor', sa.String(), nullable=False),
     sa.Column('classroom', sa.String(), nullable=False),
     sa.Column('subject_id', sa.Integer(), nullable=False),
@@ -108,19 +109,20 @@ def upgrade() -> None:
     sa.Column('deleted_date', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['course_id'], ['course.id'], ),
     sa.ForeignKeyConstraint(['lead_id'], ['lead.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('lead_id', 'course_id', name='unique_lead_course')
     )
     op.create_index(op.f('ix_enrollment_deleted_date'), 'enrollment', ['deleted_date'], unique=False)
     op.create_table('status_change',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('start_date', sa.DateTime(), nullable=False),
-    sa.Column('end_date', sa.DateTime(), nullable=False),
+    sa.Column('end_date', sa.DateTime(), nullable=True),
     sa.Column('status', sa.Enum('created', 'progress', 'completed', 'failed', 'dropped', name='enrollment_status_enum'), nullable=False),
     sa.Column('enrollment_id', sa.Integer(), nullable=False),
     sa.Column('created_date', sa.DateTime(timezone=True), nullable=True),
     sa.Column('updated_date', sa.DateTime(timezone=True), nullable=True),
     sa.Column('deleted_date', sa.DateTime(timezone=True), nullable=True),
-    sa.ForeignKeyConstraint(['enrollment_id'], ['enrollment.id'], ),
+    sa.ForeignKeyConstraint(['enrollment_id'], ['enrollment.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_status_change_deleted_date'), 'status_change', ['deleted_date'], unique=False)
