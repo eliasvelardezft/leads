@@ -35,6 +35,32 @@ class LeadRepository(IRepository):
         db_leads = query.all()
         leads = [LeadPersistanceAdapter.persistance_to_domain(lead) for lead in db_leads]
         return leads
+    
+    def pagination_filter(
+        self,
+        offset: int | None = None,
+        limit: int | None = None,
+        filters: dict[str, Any] = {},
+    ) -> dict[str, list[Lead] | int]:
+        query = self.session.query(LeadSQL)
+        for key, value in filters.items():
+            try:
+                query = query.filter(getattr(LeadSQL, key) == value)
+            except Exception as e:
+                raise InvalidFilter(f"Invalid filter: {key}={value}")
+
+        count = query.count()
+        if not offset and not limit:
+            return {
+                "count": count,
+                "results": [],
+            }
+        db_leads = query.offset(offset).limit(limit).all()
+        leads = [LeadPersistanceAdapter.persistance_to_domain(lead) for lead in db_leads]
+        return {
+            "count": count,
+            "results": leads,
+        }
 
     def create(self, lead: Lead) -> Lead:
         db_lead = LeadPersistanceAdapter.domain_to_persistance(lead)

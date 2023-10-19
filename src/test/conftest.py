@@ -59,7 +59,11 @@ class BaseTestClass:
         test_session.refresh(course_sql)
         return course_sql
 
-    def _generate_lead(self, id: str = ''):
+    def _generate_lead(
+            self,
+            id: str = '',
+            year_of_inscription: int = 2019,
+        ):
         test_session = self.session
         address_sql = AddressSQL(
             street='Av. Colon',
@@ -75,7 +79,7 @@ class BaseTestClass:
             phone_number="3515555555",
             career_id=1,
             address=address_sql,
-            year_of_inscription=2021,
+            year_of_inscription=year_of_inscription,
         )
         test_session.add(lead_sql)
         test_session.commit()

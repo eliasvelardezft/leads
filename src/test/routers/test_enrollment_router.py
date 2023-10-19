@@ -1,15 +1,6 @@
 
-import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import MagicMock
-from sqlalchemy.orm import Session
 
-from api.v1.routers.enrollment import router
-from api.v1.dtos.enrollment import EnrollmentCreate
-from domain.models.enrollment import Enrollment
-from domain.services import EnrollmentService
-from api.v1.adapters import EnrollmentClientAdapter
-from api.v1.exceptions import EntityAlreadyExists
 from test.conftest import BaseTestClass
 
 
@@ -45,7 +36,7 @@ class TestEnrollmentRouter(BaseTestClass):
 
         response = client.get('/api/v1/enrollments/1')
         assert response.status_code == 404
-        assert response.json()['detail'] == 'entity_does_not_exist'
+        assert response.json()['detail'] == 'enrollment_does_not_exist'
 
         self._generate_lead()
         self._generate_lead(id="2")

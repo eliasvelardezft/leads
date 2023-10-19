@@ -8,6 +8,7 @@ from api.v1.exceptions import (
 )
 from api.v1.adapters.lead_adapter import LeadClientAdapter
 from api.v1.dtos.lead import LeadCreate, LeadRead
+from api.v1.dtos.pagination import PaginationParams, PaginatedResponse
 from api.v1.dependencies.domain_services import get_lead_service
 from domain.services.lead_service import LeadService
 
@@ -18,22 +19,32 @@ router = APIRouter()
 @router.get(
     "/",
     status_code=status.HTTP_200_OK,
-    response_model=list[LeadRead],
+    response_model=PaginatedResponse,
 )
 def get_leads(
     email: str | None = None,
+    pagination_params: PaginationParams = Depends(),
     lead_service: LeadService = Depends(get_lead_service),
 ):
     filters = {}
     if email:
         filters["email"] = email
 
-    domain_leads = lead_service.get_leads(filters=filters)
+    paginated_leads = lead_service.get_leads_paginated(
+        page=pagination_params.page,
+        per_page=pagination_params.per_page,
+        filters=filters
+    )
     client_leads = [
         LeadClientAdapter.domain_to_client(lead)
-        for lead in domain_leads
+        for lead in paginated_leads.get("results", [])
     ]
-    return client_leads
+    return PaginatedResponse(
+        count=paginated_leads.get("count", 0),
+        results=client_leads,
+        next_page=paginated_leads.get("next_page"),
+        previous_page=paginated_leads.get("previous_page"),
+    )
 
 
 @router.get(

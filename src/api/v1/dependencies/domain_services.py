@@ -14,6 +14,7 @@ from infrastructure.persistance.repositories import (
     EnrollmentRepository,
     StatusChangeRepository,
 )
+from infrastructure.paginator import Paginator
 from infrastructure.persistance.base import get_session
 
 
@@ -26,7 +27,10 @@ def get_admin_service(session: Session = Depends(get_session)) -> AdminService:
 
 
 def get_lead_service(session: Session = Depends(get_session)) -> LeadService:
-    return LeadService(repository=LeadRepository(session))
+    return LeadService(
+        repository=LeadRepository(session),
+        paginator=Paginator,
+    )
 
 
 def get_enrollment_service(session: Session = Depends(get_session)) -> EnrollmentService:

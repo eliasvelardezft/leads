@@ -9,6 +9,13 @@ class IRepository(ABC):
     def filter(filter: dict[str, Any] = {}) -> list[Any]:
         raise NotImplementedError
 
+    def paginated_filter(
+        offset: int,
+        limit: int,
+        filters: dict[str, Any] = {},
+    ) -> list[Any]:
+        raise NotImplementedError
+
     def create(object: Any) -> Any:
         raise NotImplementedError
 
