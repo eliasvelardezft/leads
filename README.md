@@ -1,4 +1,4 @@
-Students (leads) fastapi service
+frontend repo: https://github.com/eliasvelardezft/leads-frontend/
 
 ## Domain Modeling
 
