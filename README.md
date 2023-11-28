@@ -1,3 +1,6 @@
+## Leads (students)
+This is a students enrollment service.
+
 frontend repo: https://github.com/eliasvelardezft/leads-frontend/
 
 ## Domain Modeling
